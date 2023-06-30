@@ -97,7 +97,7 @@ int main(int argc, char **argv)
         }
         else
         {
-            printf("Enviando trama (%d/10)...\n", i + 1);
+            printf("Enviando trama (%d/10)...\n", k + 1);
         }
     }
     
