@@ -28,7 +28,7 @@ int main()
         if (d->description)
             printf(" (%s)\n", d->description);
         else
-            printf(" (No hay descripci�n disponible)\n");
+            printf(" (No hay descripción disponible)\n");
     }
     
     if (i == 0)
@@ -42,7 +42,7 @@ int main()
     
     if (inum < 1 || inum > i)
     {
-        printf("\nNumero de interfaz fuera de rango.\n");
+        printf("\nNúmero de interfaz fuera de rango.\n");
         /* Liberar la lista de dispositivos */
         pcap_freealldevs(alldevs);
         return -1;
@@ -52,10 +52,10 @@ int main()
     for (d = alldevs, i = 0; i < inum - 1; d = d->next, i++);
     
     if ((fp = (pcap_t *)pcap_open(d->name, // nombre del dispositivo
-                                100,        // porci�n del paquete que vamos a enviar, en este caso solo los primeros 100 bytes
+                                100,        // porción del paquete que vamos a enviar, en este caso solo los primeros 100 bytes
                                 1,          // modo promiscuo  (Cualquier numero diferente de cero lo activa, si es 0 lo desactiva)
-                                1000,       // especifica el tiempo de espera del b�fer del paquete, como un valor no negativo, en milisegundos.
-                                NULL,       // Autenticaci�n en una maquina remota
+                                1000,       // especifica el tiempo de espera del búfer del paquete, como un valor no negativo, en milisegundos.
+                                NULL,       // Autenticación en una maquina remota
                                 errbuf      // error buffer
                                 )) == NULL)
     {
@@ -67,20 +67,26 @@ int main()
         return -1;
     }
     
-    /* En este punto no necesitamos m�s la lista de dispositivos, entonces la liberamos */
+    /* En este punto no necesitamos más la lista de dispositivos, entonces la liberamos */
 	pcap_freealldevs(alldevs);
     
-    /* Suponiendo que estamos en Ethernet, configuramos la mac destino como ff:ff:ff:ff:ff:ff */
-    for (i = 0; i < 6; i++)
-        packet[i] = 0xff;
+    fflush(stdin);
     
-    /* Establecemos la mac origen como 2:2:2:2:2:2 */
-    for (i = 6; i < 12; i++)
-        packet[i] = 2;
+    /* Pediremos los valores de la MAC Destino */
+	printf("Ingrese la MAC Destino (en formato hexadecimaal): ");
+	scanf("%hhx %hhx %hhx %hhx %hhx %hhx", &packet[0], &packet[1], &packet[2], &packet[3], &packet[4], &packet[5]);
+    
+    fflush(stdin);
+    
+	/* Pediremos los valores de la MAC Origen */
+	printf("\nIngrese la MAC Origen (en formato hexadecimal): ");
+	scanf("%hhx %hhx %hhx %hhx %hhx %hhx", &packet[6], &packet[7], &packet[8], &packet[9], &packet[10], &packet[11]);    
+    
+    fflush(stdin);
     
     /* Establecemos el tipo de la trama */
-    packet[12] = 0x08;
-    packet[13] = 0x00;
+    printf("\nIngrese el tipo de trama (en formato hexadecimal): ");
+    scanf("%hhx %hhx", &packet[12], &packet[13]);     
     
     /* Llenamos el resto de la trama con un dato 'random' */
     for (i = 14; i < 100; i++)
@@ -100,7 +106,13 @@ int main()
         }
     }
     
-    printf("\nSe ha enviado por completo las tramas");
+    for(i = 0; i < 100; i++){
+		if(i % 8 == 0)
+			printf("\n\t");
+    	printf("%02X: ", packet[i]); 
+	}
+    
+    printf("\n\nSe ha enviado por completo las tramas");
     
     return 0;
 }
