@@ -44,8 +44,8 @@ public class RaePacket{
         nif = new NifSelector().selectNetworkInterface();
       }
       catch (IOException e) {
-          System.out.println("ERROR:  No se ha podido obtener la lista de interfaces de red disponibles:");
-            e.printStackTrace();
+        System.out.println("ERROR:  No se ha podido obtener la lista de interfaces de red disponibles:");
+        e.printStackTrace();
         return;
       }
 
